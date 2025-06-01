@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Journey 💗</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: black;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+    }
+    .container {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      background-color: black;
+    }
+    .welcome-page {
+      position: absolute;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      background-color: black;
+      z-index: 10;
+      text-align: center;
+    }
+    .scene-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+    .page {
+      position: absolute;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .page2 {
+      background-image: url('bg1final.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: #8B0000;
+      font-size: 24px;
+    }
+    .page3 {
+      background-image: url('bg2.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      font-size: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      left: 100%;
+    }
+    .page4 {
+      background-image: url('bg3.jpeg'); 
+      background-size: cover;
+      background-position: center;
+      color: rgb(152, 87, 129);
+      font-size: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+    .page5 {
+      background-image: url('bg4.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: #FFFFFF;
+      font-size: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 100%;
+    }
+    .page6 {
+      background-image: url('bg5.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: #6a2e2e;
+      font-size: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-bottom: 0;
+      padding-top: 2vh;
+    }
+    .bottom-image {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30%;
+      background-image: url('looking_each.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .start-btn, .next-btn {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+      z-index: 3;
+      position: relative;
+      margin: 10px;
+    }
+    .start-btn:hover, .next-btn:hover {
+      background: linear-gradient(to right, #ff7eb3, #ff758c);
+    }
+    .next-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      font-size: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      margin-top: 10px;
+    }
+    .next-btn:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(5px);
+    }
+    .envelope {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: auto;
+      cursor: pointer;
+      z-index: 20;
+    }
+    .envelope-gif {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .heart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: red;
+      z-index: 3;
+    }
+    .hidden {
+      display: none;
+    }
+    #loveVideo {
+      /* width: 80vw; */
+      height: 80vh;
+      border-radius: 30px;
+      margin-top: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 30;
+      border: 3px solid black;
+    }
+    #closeVideo {
+      position: absolute;
+      top: 10%;
+      right: 10%;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 31;
+      display: none;
+    }
+    .letter {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      background-color: #f9f4e7;
+      border: 1px solid #d3cbb8;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      text-align: center;
+      z-index: 20;
+      transition: top 0.5s ease;
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+    }
+    .letter-content h2 {
+      margin-top: 0;
+      font-family: 'Cursive', sans-serif;
+      color: #8b4513;
+    }
+    .letter-content p {
+      color: #5a4a3b;
+    }
+    .celebrate-btn {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    .celebrate-btn:hover {
+      background: linear-gradient(to right, #ff7eb3, #ff758c);
+    }
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background-color: #fff;
+      border: 1px solid #d3cbb8;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      text-align: center;
+      z-index: 25;
+      transition: top 0.5s ease;
+    }
+    .popup-content p {
+      color: #5a4a3b;
+    }
+    .popup-btn {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    .popup-btn:hover {
+      background: linear-gradient(to right, #ff7eb3, #ff758c);
+    }
+    .note {
+      position: absolute;
+      bottom: 20px;
+      font-size: 16px;
+      color: #ccc;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" loop>
+    <source src="bgsound.mp3">
+  </audio>
+  <div class="container">
+    <div class="welcome-page" id="welcomePage">
+      <div id="welcomeText">Hey MY LOVE ❤️...<br>Welcome</div>
+      <div class="note">Note: Click anywhere for Bg-music</div>
+    </div>
+    <div class="scene-container" id="sceneContainer">
+      <div class="page page2" id="page2">
+        <h1>The World Was Never Better... </h1>
+        <p>Until the moment my eyes found you❤️</p>
+        <button class="start-btn" id="startJourney">Let's begin</button>
+        <div class="bottom-image"></div>
+      </div>
+      <div class="page page3" id="page3">
+        <div class="content">
+          <h1>Seeing you had forever became My Habit ❤️</h1>
+          <p>A longing I'd never want to break...🧿</p>
+          <button class="next-btn" id="nextToPage4">Next Chapter</button>
+        </div>
+      </div>
+      <div class="page page4" id="page4">
+        <h1>Never had the Courage to talk...</h1>
+        <p>cause YOU seemed too Perfect to be true✨</p>
+        <button class="next-btn" id="nextToPage5">Next Page</button>
+      </div>
+      <div class="page page5" id="page5">
+        <h1>Not wanting to delay anymore...</h1>
+        <p>Strangers today, a Story tomorrow❤️</p>
+        <button class="next-btn" id="nextToPage6">Next Page</button>
+      </div>
+      <div class="page page6" id="page6">
+        <h1>Will You Be My Valentine? 💌</h1>
+        <p style="margin-top: 10px;">
+          "Exam mein toh main detain ho hi gaya 🥲 <br> 
+          Par tum apne pyaar mein fail mat hone dena!" 😭😂<br>
+          <br><br>
+          Ab ye mat bolna tumari padhai ki umar hai <br>🌼👇🏻
+        </p>
+        <audio controls style="margin-bottom: 3vh;">
+          <source src="detain.mp3" type="audio/mpeg">
+        </audio>
+        <div>
+          <button class="next-btn" id="yesButton" data-tooltip="Trust me!!!">Yes</button>
+          <button class="next-btn" id="noButton" data-tooltip="Abhhi naaa jao choddh kar, yee ❤️ abbhi bhara nahi 🥺">No</button>
+        </div>
+        <div id="letter" class="letter hidden">
+          <div class="letter-content">
+            <h2>My Dearest,</h2>
+            <p>
+              From the moment I saw you, my heart knew you were the one. <br>
+              Every day with you is a new adventure, filled with love and joy. <br>
+              Let's celebrate this beautiful journey together. <br>
+              Can You Hold My Hand Forever? 💖
+            </p>
+            <button id="celebrateButton" class="celebrate-btn">Yess I Do 🤝</button>
+          </div>
+        </div>
+        <video id="loveVideo" class="hidden">
+          <source src="yesVDO.mp4" type="video/mp4">
+         
+        </video>
+        <button id="closeVideo" class="hidden">Close</button>
+        <div id="noMessage1" class="popup hidden">
+          <div class="popup-content">
+            <p>Are you sure you want to goo? 😢</p>
+            <button id="nextMsg1" class="popup-btn">Yess..</button>
+          </div>
+        </div>
+        <div id="noMessage2" class="popup hidden">
+          <div class="popup-content">
+            <p>Fir Ekbar Sochh Loo🥺</p>
+            <button id="nextMsg2" class="popup-btn">Soch Liya..</button>
+          </div>
+        </div>
+        <div id="noMessage3" class="popup hidden">
+          <div class="popup-content">
+            <p>Jana hii hai ?</p>
+            <button id="nextMsg3" class="popup-btn">Hain..</button>
+          </div>
+        </div>
+        <div id="noMessage4" class="popup hidden">
+          <div class="popup-content">
+            <p>Jao phirrr...</p>
+            <button id="closeNoMsg" class="popup-btn">Bye</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const bgMusic = document.getElementById("bgMusic");
+      const startBtn = document.getElementById("startJourney");
+      const nextBtn = document.getElementById("nextToPage4");
+      const nextToPage5Btn = document.getElementById("nextToPage5");
+      const nextToPage6Btn = document.getElementById("nextToPage6");
+      const page2 = document.getElementById("page2");
+      const page3 = document.getElementById("page3");
+      const page4 = document.getElementById("page4");
+      const page5 = document.getElementById("page5");
+      const page6 = document.getElementById("page6");
+      const yesButton = document.getElementById("yesButton");
+      const letter = document.getElementById("letter");
+      const loveVideo = document.getElementById("loveVideo");
+      const closeVideo = document.getElementById("closeVideo");
+      const noButton = document.getElementById("noButton");
+      const noMessage1 = document.getElementById("noMessage1");
+      const noMessage2 = document.getElementById("noMessage2");
+      const noMessage3 = document.getElementById("noMessage3");
+      const noMessage4 = document.getElementById("noMessage4");
+      const nextMsg1 = document.getElementById("nextMsg1");
+      const nextMsg2 = document.getElementById("nextMsg2");
+      const nextMsg3 = document.getElementById("nextMsg3");
+      const closeNoMsg = document.getElementById("closeNoMsg");
+
+      function playMusic() {
+        bgMusic.play().catch(error => {});
+      }
+      document.body.addEventListener("click", playMusic, { once: true });
+      document.body.addEventListener("touchstart", playMusic, { once: true });
+
+      const texts = [
+        "I've Been Waiting for You ❤️",
+        "Your Presence Makes Everything Beautiful 💖",
+        "The Light of My Life ✨",
+        "My Soulmate, My Everything 💞",
+        "Only for you ❤️"
+      ];
+      let index = 0;
+      function changeText() {
+        if (index < texts.length) {
+          gsap.to("#welcomeText", {
+            duration: 0.5,
+            opacity: 0,
+            onComplete: () => {
+              document.getElementById("welcomeText").textContent = texts[index];
+              gsap.to("#welcomeText", { duration: 0.5, opacity: 1 });
+              if (index === texts.length - 1) {
+                setTimeout(() => {
+                  gsap.to("#welcomePage", {
+                    duration: 1.5,
+                    y: "-100%",
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                      document.getElementById("welcomePage").style.display = "none";
+                    }
+                  });
+                }, 3000);
+              }
+              index++;
+            }
+          });
+        }
+      }
+      setInterval(changeText, 2000);
+
+      startBtn.addEventListener("click", function () {
+        gsap.timeline()
+          .to(page2, { xPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0)
+          .to(page3, { xPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0);
+      });
+
+      nextBtn.addEventListener("click", function () {
+        gsap.timeline()
+          .to(page3, { yPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0)
+          .to(page4, { yPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0);
+      });
+
+      nextToPage5Btn.addEventListener("click", function () {
+        gsap.timeline()
+          .to(page4, { xPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0)
+          .to(page5, { xPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0);
+      });
+
+      nextToPage6Btn.addEventListener("click", function () {
+        gsap.timeline()
+          .to(page5, { yPercent: -100, duration: 1.5, ease: "power2.inOut" }, 0)
+          .to(page6, { yPercent: -100, duration: 1.5, ease: "power2.inOut", onComplete: () => bgMusic.pause() }, 0);
+      });
+
+      yesButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        letter.classList.remove("hidden");
+        gsap.to(letter, { top: "50%", duration: 1, ease: "power2.out" });
+      });
+
+      const celebrateButton = document.getElementById("celebrateButton");
+      celebrateButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        letter.classList.add("hidden");
+        loveVideo.classList.remove("hidden");
+        loveVideo.currentTime = 0;
+        loveVideo.play();
+      });
+
+      document.body.addEventListener("click", function (event) {
+        if (!loveVideo.classList.contains("hidden") && !event.target.closest('#yesButton')) {
+          loveVideo.pause();
+          loveVideo.classList.add("hidden");
+        }
+      });
+
+      noButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        noMessage1.classList.remove("hidden");
+        gsap.to(noMessage1, { top: "50%", duration: 1, ease: "power2.out" });
+      });
+
+      nextMsg1.addEventListener("click", function (event) {
+        event.stopPropagation();
+        noMessage1.classList.add("hidden");
+        noMessage2.classList.remove("hidden");
+        gsap.to(noMessage2, { top: "50%", duration: 1, ease: "power2.out" });
+      });
+
+      nextMsg2.addEventListener("click", function (event) {
+        event.stopPropagation();
+        noMessage2.classList.add("hidden");
+        noMessage3.classList.remove("hidden");
+        gsap.to(noMessage3, { top: "50%", duration: 1, ease: "power2.out" });
+      });
+
+      nextMsg3.addEventListener("click", function (event) {
+        event.stopPropagation();
+        noMessage3.classList.add("hidden");
+        noMessage4.classList.remove("hidden");
+        gsap.to(noMessage4, { top: "50%", duration: 1, ease: "power2.out" });
+      });
+
+      closeNoMsg.addEventListener("click", function (event) {
+        event.stopPropagation();
+        noMessage4.classList.add("hidden");
+      });
+    });
+  </script>
+</body>
+</html>
